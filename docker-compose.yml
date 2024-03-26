@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: node:20-alpine
+    working_dir: /app
+    command: sh -c "npm install; npm run build; npm run dev -- --host"
+    ports:
+      - 5173:5173
+    expose:
+      - 5173
+    volumes:
+      - ./frontend:/app
+    environment:
+      - PUBLIC_DATABASE=${PUBLIC_DATABASE} 
+  backend:
+    image: ghcr.io/muchobien/pocketbase:latest
+    container_name: pocketbase
+    restart: unless-stopped
+    ports:
+      - 8090:8090
+    volumes:
+      - ./backend/data:/pb/data
+    healthcheck: #optional (recommended) since v0.10.0
+      test: wget --no-verbose --tries=1 --spider http://localhost:8090/api/health || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
