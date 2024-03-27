@@ -40,7 +40,7 @@
 		} else {
 			try {
 				await pocketbase.collection('users').authWithPassword(email, password);
-				// Redirect to home on successful login.
+                // Redirect to home on successful login.
 				goto('/');
 			} catch (error) {
 				message = errorMessage(error);
@@ -60,7 +60,11 @@
 				alt="Your Company"
 			/>
 			<h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-				Sign in to your account
+				{#if register}
+					Register a new account
+				{:else}
+					Sign in to your account
+				{/if}
 			</h2>
 		</div>
 		<!-- Added form action -->
@@ -76,7 +80,7 @@
 				<Label class="space-y-2">
 					<!-- <span>Password</span> -->
 					<Input type="password" placeholder="Password" size="md" required bind:value={password}>
-						<LockSolid slot="left" class="w-4 h-4" />
+						<LockSolid slot="left" class="w-4 h-4"/>
 					</Input>
 				</Label>
 				{#if register}
